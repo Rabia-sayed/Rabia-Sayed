@@ -1,0 +1,100 @@
+import google.generativeai as genai
+import os
+from tools import get_current_time
+
+# Configure Google AI Studio API key
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+# Create Gemini model with tool
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    tools=[get_current_time]
+)
+
+chat = model.start_chat()
+
+print("🌍 Time Agent Started (type 'exit' to quit)")
+
+while True:
+    user_input = input("\nUser: ")
+    if user_input.lower() == "exit":
+        break
+
+    response = chat.send_message(user_input)
+    print("Agent:", response.text)
+import requests
+
+def get_current_time(city: str):
+    city_timezone = {
+        "lahore": "Asia/Karachi",
+        "peshawar": "Asia/Karachi",
+        "new york": "America/New_York"
+    }
+
+    tz = city_timezone.get(city.lower())
+    if not tz:
+        return "City not supported."
+
+    url = f"https://worldtimeapi.org/api/timezone/{tz}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        return f"Current time in {city.title()} is {data['datetime']}"
+    else:
+        return "Unable to fetch time."
+# Agentic AI – Time Agent Project
+
+## Objective
+The objective of this project is to build an Agentic AI system using Google ADK
+and Google AI Studio API that can answer real-time global time queries.
+
+## What is Agentic AI?
+Agentic AI refers to AI systems that can reason, make decisions, and use tools
+to interact with the real world autonomously.
+
+## Role of Google ADK
+Google ADK (Agent Development Kit) enables developers to:
+- Create AI agents
+- Integrate tools with LLMs
+- Connect AI reasoning with external APIs
+
+## Tool Implementation
+This project uses a Python tool function that calls the World Time API to fetch
+live time for different cities.
+
+## Questions Handled
+- What time in Lahore?
+- What time in Peshawar?
+- What time in New York?
+
+## Technologies Used
+- Python
+- Google AI Studio (Gemini API)
+- World Time API
+- VS Code
+
+## Conclusion
+This project demonstrates a working Agentic AI system capable of fetching
+real-world data using tool calling, fulfilling the principles of Agentic AI.
+google-generativeai
+requests
+# Google ADK Time Agent
+
+This project is an Agentic AI application built using Google AI Studio API.
+The agent answers real-time global time questions using a tool function.
+
+## Features
+- Uses Google Gemini model
+- Tool-based real-time API access
+- Runs in VS Code terminal
+
+## How to Run
+1. Install dependencies
+2. Set GOOGLE_API_KEY
+3. Run agent.py
+
+## Supported Cities
+- Lahore
+- Peshawar
+- New York
